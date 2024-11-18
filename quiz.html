@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crocodile Quiz</title>
+  <style>
+    /* Same styles as before */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_aTF7_u5Y0-JKzzCuXJFxIipb-Imjzlab0Q&s');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: brightness(100%);
+      text-align: center;
+      color: white;
+    }
+
+    .quiz-container {
+      max-width: 800px;
+      margin: 80px auto;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: #00e676;
+    }
+
+    .question {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+    }
+
+    .options li {
+      margin: 15px 0;
+    }
+
+    .options input[type="radio"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    button {
+      margin: 10px 5px;
+      background-color: #00e676;
+      color: black;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #76ff03;
+      transform: scale(1.05);
+    }
+
+    /* Result Popup */
+    .result-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff;
+      color: #333;
+      width: 80%;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      display: none;
+    }
+
+    .result-popup h2 {
+      margin-bottom: 10px;
+      font-size: 2rem;
+      color: #004d40;
+    }
+
+    .result-popup ul {
+      text-align: left;
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 99;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Crocodile Quiz</h1>
+    <div id="quiz">
+      <p class="question" id="question"></p>
+      <ul class="options" id="options"></ul>
+      <button id="nextButton">Next</button>
+      <button id="endButton">End Quiz Now</button>
+    </div>
+  </div>
+
+  <!-- Result Popup -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="result-popup" id="resultPopup">
+    <h2>Quiz Results</h2>
+    <p id="score"></p>
+    <p>Here are the correct answers for the questions you got wrong:</p>
+    <ul id="corrections"></ul>
+    <button id="closePopup">Close</button>
+  </div>
+
+  <script>
+    // Questions Array
+    const questions = [
+      { question: "What is the average lifespan of a crocodile?", options: ["20-30 years", "70-100 years", "50-60 years", "10-20 years"], answer: 2 },
+      { question: "Which crocodile species is the largest?", options: ["Nile Crocodile", "Saltwater Crocodile", "American Crocodile", "Dwarf Crocodile"], answer: 1 },
+      { question: "Crocodiles are most closely related to which group of animals?", options: ["Lizards", "Snakes", "Birds", "Turtles"], answer: 2 },
+      { question: "How many species of crocodiles exist today?", options: ["13", "15", "23", "10"], answer: 2 },
+      { question: "What is the primary habitat of crocodiles?", options: ["Oceans", "Rivers and Lakes", "Deserts", "Mountains"], answer: 1 },
+      { question: "Which sense is most developed in crocodiles?", options: ["Sight", "Smell", "Hearing", "Touch"], answer: 0 },
+      { question: "What do crocodiles mainly eat?", options: ["Plants", "Insects", "Meat", "Fruits"], answer: 2 },
+      { question: "Which region is home to the gharial?", options: ["India", "Africa", "Australia", "South America"], answer: 0 },
+      { question: "How long can crocodiles hold their breath underwater?", options: ["1-2 minutes", "10-15 minutes", "30 minutes", "1 hour"], answer: 3 },
+      { question: "What feature helps crocodiles stay hidden in water?", options: ["Camouflage", "Transparent eyelids", "Small size", "Silent swimming"], answer: 0 },
+    ];
+
+    let shuffledQuestions = []; // To store shuffled questions
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let incorrectAnswers = [];
+
+    const questionElement = document.getElementById("question");
+    const optionsElement = document.getElementById("options");
+    const nextButton = document.getElementById("nextButton");
+    const endButton = document.getElementById("endButton");
+    const resultPopup = document.getElementById("resultPopup");
+    const modalOverlay = document.getElementById("modalOverlay");
+    const scoreElement = document.getElementById("score");
+    const correctionsElement = document.getElementById("corrections");
+    const closePopupButton = document.getElementById("closePopup");
+
+    // Fisher-Yates Shuffle Function
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Shuffle questions on page load
+    function initializeQuiz() {
+      shuffledQuestions = shuffle([...questions]);
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const currentQuestion = shuffledQuestions[currentQuestionIndex];
+      questionElement.textContent = currentQuestion.question;
+      optionsElement.innerHTML = "";
+
+      currentQuestion.options.forEach((option, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <label>
+            <input type="radio" name="option" value="${index}">
+            ${option}
+          </label>
+        `;
+        optionsElement.appendChild(li);
+      });
+    }
+
+    function checkAnswer() {
+      const selectedOption = document.querySelector('input[name="option"]:checked');
+      if (!selectedOption) {
+        alert("Please select an answer!");
+        return false;
+      }
+      const answer = parseInt(selectedOption.value);
+      if (answer === shuffledQuestions[currentQuestionIndex].answer) {
+        score++;
+      } else {
+        incorrectAnswers.push({
+          question: shuffledQuestions[currentQuestionIndex].question,
+          correctAnswer: shuffledQuestions[currentQuestionIndex].options[shuffledQuestions[currentQuestionIndex].answer],
+        });
+      }
+      return true;
+    }
+
+    function showResults() {
+      modalOverlay.style.display = "block";
+      resultPopup.style.display = "block";
+      scoreElement.textContent = `Your score: ${score} out of ${currentQuestionIndex + 1}`;
+      correctionsElement.innerHTML = "";
+
+      incorrectAnswers.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = `${item.question} - Correct Answer: ${item.correctAnswer}`;
+        correctionsElement.appendChild(li);
+      });
+    }
+
+    nextButton.addEventListener("click", () => {
+      if (!checkAnswer()) return;
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < shuffledQuestions.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    });
+
+    endButton.addEventListener("click", () => {
+      if (!checkAnswer()) return;
+      showResults();
+    });
+
+    closePopupButton.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+      resultPopup.style.display = "none";
+    });
+
+    // Initialize the quiz on page load
+    initializeQuiz();
+  </script>
+</body>
+</html>
