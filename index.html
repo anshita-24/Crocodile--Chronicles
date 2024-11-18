@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CROCODILE CHRONICLES - Home</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white;
+      text-align: center;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: url('https://media.cnn.com/api/v1/images/stellar/prod/2024-11-02t064619z-909683661-rc2uwaambypw-rtrmadp-3-australia-crocodile-copy.jpg?c=16x9&q=h_653,w_1160,c_fill/f_webp'); /* Replace with your image path */
+      background-size: cover;
+      background-position: center;
+      filter: brightness(60%);
+      background-color: #333; 
+    }
+    .container {
+      padding: 50px 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+    p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    }
+    .nav-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .nav-buttons a {
+      display: inline-block;
+      padding: 12px 20px;
+      width: 250px;
+      text-align: center;
+      background-color: #004d40;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .nav-buttons a:hover {
+      background-color: #00796b;
+      transform: scale(1.05);
+    }
+    .quiz-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #f4511e;
+      color: white;
+      font-size: 1rem;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .quiz-button:hover {
+      background-color: #e53935;
+      transform: scale(1.1);
+    }
+    .quiz-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      color: #000;
+      width: 80%;
+      max-width: 500px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+      display: none;
+    }
+    .quiz-modal h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .quiz-modal p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .quiz-modal button {
+      background-color: #004d40;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .quiz-modal button:hover {
+      background-color: #00796b;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CROCODILE CHRONICLES</h1>
+    <h2>Welcome to Crocodile World!</h2>
+    <p>
+      Discover the incredible world of crocodiles! These magnificent creatures are among the oldest living reptiles, having existed for over 200 million years. They have witnessed the rise and fall of dinosaurs and continue to thrive today in their natural habitats.  
+    </p>
+    <p>
+      On this website, you’ll explore the diverse species of crocodiles, their unique adaptations, and the ecosystems they call home. Learn amazing facts, view stunning images, and uncover the secrets of these powerful predators.  
+    </p>
+    <div class="nav-buttons">
+      <a href="species.html">🐊 Explore Species</a>
+      <a href="habitatmap.html">🌍 Habitat Map</a>
+      <a href="facts.html">📖 Fun Facts</a>
+    </div>
+  </div>
+  <button class="quiz-button" id="quizButton">🧠 Take a Quiz</button>
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="quiz-modal" id="quizModal">
+    <h2>Quick Quiz</h2>
+    <p>Are you ready to test your crocodile knowledge?</p>
+    <button id="startQuiz">Start Quiz</button>
+  </div>
+  <script>
+    const quizButton = document.getElementById('quizButton');
+    const quizModal = document.getElementById('quizModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const startQuizButton = document.getElementById('startQuiz');
+    quizButton.addEventListener('click', () => {
+      quizModal.style.display = 'block';
+      modalOverlay.style.display = 'block';
+    });
+    modalOverlay.addEventListener('click', () => {
+      quizModal.style.display = 'none';
+      modalOverlay.style.display = 'none';
+    });
+    quizButton.addEventListener('click', () => {
+  window.location.href = 'quiz.html'; 
+});
+  </script>
+</body>
+</html>
