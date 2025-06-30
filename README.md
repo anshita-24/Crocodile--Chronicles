@@ -36,13 +36,14 @@ Dive into the mysteries of these ancient reptiles, explore their habitats, disco
 
 ## 📸 Preview
 
-<p align="center">
-  <img src="screenshots/homepage.png" width="80%" alt="Homepage Screenshot" />
-  <img src="screenshots/species-page.png" width="80%" alt="Species Page Screenshot" />
-  <img src="screenshots/habitat-map.png" width="80%" alt="Habitat Map Screenshot" />
-  <img src="screenshots/fun-facts.png" width="80%" alt="Fun Facts Page Screenshot" />
-  <img src="screenshots/quiz.png" width="80%" alt="Quiz Page Screenshot" />
-</p>
+<img src="screenshots/homepage.jpg" width="80%"  /><br/>
+<img src="screenshots/species1.jpg" width="80%"  />
+<img src="screenshots/species2.jpg" width="80%"  /><br/>
+<img src="screenshots/Habitat.jpg" width="80%"  /><br/>
+<img src="screenshots/funfacts.jpg" width="80%"  /><br/>
+<img src="screenshots/Quiz1.jpg" width="80%"  />
+<img src="screenshots/Quiz2.jpg" width="80%"  />
+
 
 ---
 
